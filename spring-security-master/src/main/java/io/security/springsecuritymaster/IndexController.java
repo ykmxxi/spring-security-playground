@@ -11,4 +11,14 @@ public class IndexController {
         return "Login Success: index";
     }
 
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
+    @GetMapping("/loginPage")
+    public String login() {
+        return "loginPage";
+    }
+
 }
