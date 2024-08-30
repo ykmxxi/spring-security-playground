@@ -18,26 +18,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated()) // http 요청에 대한 인가 설정
-                .formLogin(form -> form
-//                        .loginPage("/loginPage")
-                                .loginProcessingUrl("/loginProc")
-                                .defaultSuccessUrl("/", true)
-                                .failureUrl("/failed")
-                                .usernameParameter("username")
-                                .passwordParameter("password")
-                                .successHandler((req, res, auth) -> {
-                                    // AuthenticationSuccessHandler.onAuthenticationSuccess() 구현
-                                    log.info("authentication: {}", auth);
-                                    res.sendRedirect("/home");
-                                })
-                                .failureHandler((req, res, e) -> {
-                                    // AuthenticationFailureHandler.onAuthenticationFailure() 구현
-                                    log.info("exception: {}", e.getMessage());
-                                    res.sendRedirect("/login");
-                                })
-                                .permitAll()
-                );
+        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .httpBasic(basic -> basic.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
 
         return http.build();
     }
