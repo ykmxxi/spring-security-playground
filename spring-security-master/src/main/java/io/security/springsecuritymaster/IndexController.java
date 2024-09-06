@@ -1,9 +1,9 @@
 package io.security.springsecuritymaster;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,26 +13,37 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class IndexController {
 
-    private final SecurityContextService securityContextService;
-
-    public IndexController(final SecurityContextService securityContextService) {
-        this.securityContextService = securityContextService;
+    @GetMapping("/")
+    public Authentication index(Authentication authentication) {
+        return authentication;
     }
 
-    @GetMapping("/")
-    public String index() {
-        SecurityContext securityContext = SecurityContextHolder.getContextHolderStrategy()
-                .getContext();
-        Authentication authentication = securityContext.getAuthentication();
+    @GetMapping("/loginPage")
+    public String login() {
+        return "loginPage";
+    }
 
-        log.info("[Controller] Authentication = {}", authentication);
-        securityContextService.securityContext();
+    @GetMapping("/anonymous")
+    public String anonymous() {
+        return "anonymous";
+    }
 
-        return "index";
+    @GetMapping("/authentication")
+    public String authentication(final Authentication authentication) {
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return "anonymous";
+        } else {
+            return "null";
+        }
+    }
+
+    @GetMapping("/anonymousContext")
+    public String anonymousContext(@CurrentSecurityContext final SecurityContext context) {
+        return context.getAuthentication().getName();
     }
 
     @GetMapping("/logoutSuccess")
-    public String logoutSuccess(@CurrentSecurityContext SecurityContext context) {
+    public String logoutSuccess(@CurrentSecurityContext final SecurityContext context) {
         return "logoutSuccess";
     }
 
