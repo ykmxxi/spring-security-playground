@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.extern.slf4j.Slf4j;
 
+/*
 @Slf4j
 //@EnableWebSecurity
 //@Configuration
@@ -54,3 +55,4 @@ public class SecurityConfig3 {
     }
 
 }
+ */
