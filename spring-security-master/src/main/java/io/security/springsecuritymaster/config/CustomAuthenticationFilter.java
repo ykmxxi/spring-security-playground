@@ -24,7 +24,8 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
 
     public CustomAuthenticationFilter(final HttpSecurity http) {
         super(new AntPathRequestMatcher("/api/login", "GET"));
-        setSecurityContextRepository(getSecurityContextRepository(http));
+        // 보안 컨텍스트를 SecurityContextHolder에 설정한 후 저장소에 저장하기 위해 명시적으로 설정
+        this.setSecurityContextRepository(getSecurityContextRepository(http));
     }
 
     private SecurityContextRepository getSecurityContextRepository(final HttpSecurity http) {
