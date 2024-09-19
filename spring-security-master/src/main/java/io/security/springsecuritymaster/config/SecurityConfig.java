@@ -7,6 +7,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,11 +28,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
                 .sessionManagement(session -> session
-                        .invalidSessionUrl("/invalidSessionUrl") // 만료된 세션으로 요청 시 리다이렉션 될 URL
-                        .maximumSessions(1) // 최대 세션 수, 기본값은 무한 세션 허용
-                        // true: 사용자 인증 시도 차단, false(기본 설정): 사용자 세션 강제 만료
-                        .maxSessionsPreventsLogin(true)
-                        .expiredUrl("/expired") // 세션 만료 후 리다이렉션 될 URL
+                        // 기존 세션을 유지하면서 Session ID만 변경
+                        .sessionFixation(SessionFixationConfigurer::changeSessionId)
                 );
         return http.build();
     }
