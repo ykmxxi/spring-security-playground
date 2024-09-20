@@ -7,15 +7,25 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.security.springsecuritymaster.config.SessionInfoService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class IndexController {
 
+    private final SessionInfoService sessionInfoService;
+
     @GetMapping("/")
-    public Authentication index(Authentication authentication) {
+    public Authentication index(final Authentication authentication) {
         return authentication;
+    }
+
+    @GetMapping("/sessionInfo")
+    public void sessionInfo() {
+        sessionInfoService.sessionInfo();
     }
 
     @GetMapping("/loginPage")
