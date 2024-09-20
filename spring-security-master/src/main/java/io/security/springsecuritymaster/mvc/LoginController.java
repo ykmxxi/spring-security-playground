@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+/*
 @RestController
 @RequiredArgsConstructor
 public class LoginController {
@@ -45,3 +46,4 @@ public class LoginController {
     }
 
 }
+*/
