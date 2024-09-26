@@ -23,12 +23,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
-                .sessionManagement(session -> session
-                        .maximumSessions(2)
-                        .maxSessionsPreventsLogin(false) // 세션 강제 만료 전략
-                );
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // 커스텀하게 사용할 AuthenticationEntryPoint 설정
+                            System.out.println(authException.getMessage());
+                            response.sendRedirect("/login");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            // 커스텀하게 사용할 AccessDeniedHandler 설정
+                            System.out.println(accessDeniedException.getMessage());
+                            response.sendRedirect("/denied");
+                        }));
+
         return http.build();
     }
 
